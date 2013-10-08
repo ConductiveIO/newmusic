@@ -49,8 +49,7 @@ def get_ratings(soup):
 		i += 1
 
 # Pretty print results
-def pretty_print(page):
-	print 'New music from Pitchfork (page ' + str(page) + '):'
+def pretty_print():
 	for i in xrange(0, len(output)):
 		print output[i][0] + ' - ' + output[i][1] + '. Rating: ' + output[i][2]
 
@@ -65,7 +64,7 @@ def main():
 		get_artists(soup)
 		get_albums(soup)
 		get_ratings(soup)
-		pretty_print(i)
+		pretty_print()
 
 if __name__ == "__main__":
 	main()
