@@ -1,10 +1,11 @@
 ### Python Commandline Tool to Find New Music ###
 
-import urllib2
+import sys, urllib2
 from bs4 import BeautifulSoup
 
 pitchfork_album_url = 'http://pitchfork.com/reviews/best/albums/'
-output = [[0 for i in xrange(5)] for i in xrange(5)]
+page_limit = 8
+output = [[0 for i in xrange(3)] for i in xrange(5)]
 
 # Get ingredients
 def get_url(url):
@@ -48,19 +49,23 @@ def get_ratings(soup):
 		i += 1
 
 # Pretty print results
-def pretty_print():
-	print("New music from Pitchfork:")
+def pretty_print(page):
+	print 'New music from Pitchfork (page ' + str(page) + '):'
 	for i in xrange(0, len(output)):
-		print(output[i][0] + ' - ' + output[i][1] + '. Rating: ' + output[i][2])
+		print output[i][0] + ' - ' + output[i][1] + '. Rating: ' + output[i][2]
 
 def main():
-	data = get_url(pitchfork_album_url)
-	soup = make_soup(data)
+	if len(sys.argv) > 1:
+		page_limit = min(8, int(sys.argv[1]))
 
-	get_artists(soup)
-	get_albums(soup)
-	get_ratings(soup)
-	pretty_print()
+	for i in xrange(1, page_limit + 1):
+		data = get_url(pitchfork_album_url + str(i))
+		soup = make_soup(data)
+
+		get_artists(soup)
+		get_albums(soup)
+		get_ratings(soup)
+		pretty_print(i)
 
 if __name__ == "__main__":
 	main()
